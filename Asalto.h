@@ -9,9 +9,12 @@ class Asalto : public Soldado
 		int velocidad;
 		int fuerza_extra;
 	public:
-		Asalto(string,int,int);
+		Asalto(string,int,int,int,int);
 		int atacar(bool);
 		void defensa(int,bool);
+		int getVelocidad();
+		int getFuerzaXtra();
+		size_t getSize();
 		~Asalto();
 	
 };

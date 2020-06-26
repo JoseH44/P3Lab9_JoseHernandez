@@ -1,7 +1,9 @@
 #include "Soporte.h"
 
-Soporte::Soporte(string hnombre,int hpts_vida,int hpts_fuerza) : Soldado(hnombre,hpts_vida, hpts_fuerza)
+Soporte::Soporte(string hnombre,int hpts_vida,int hpts_fuerza,int pBlindaje,int pCamuflaje) : Soldado(hnombre,hpts_vida, hpts_fuerza)
 {
+	blindaje = pBlindaje;
+	camuflaje = pCamuflaje;
 }
 
 
@@ -19,6 +21,20 @@ void Soporte::defensa(int pts_ataque,bool atacante){
 	else
 		pts_vida-= pts_ataque;
 	
+}
+
+size_t Soporte::getSize(){
+	return sizeof(Soporte);
+}
+
+
+int Soporte::getBlindaje(){
+	return blindaje;
+}
+
+
+int Soporte::getCamuflaje(){
+	return camuflaje;
 }
 
 Soporte::~Soporte()

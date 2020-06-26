@@ -14,6 +14,7 @@ class Soldado
 		Soldado(string,int,int);
 		virtual int atacar(bool)=0;
 		virtual void defensa(int,bool)=0;
+		virtual size_t getSize()=0;
 		
 		//getter de nombre
 		string getNombre();

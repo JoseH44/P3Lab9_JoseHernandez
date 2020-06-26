@@ -1,7 +1,9 @@
 #include "Asalto.h"
 
-Asalto::Asalto(string hnombre,int hpts_vida,int hpts_fuerza) : Soldado(hnombre,hpts_vida, hpts_fuerza)
+Asalto::Asalto(string hnombre,int hpts_vida,int hpts_fuerza,int pVelocidad,int pFuerzaXtra) : Soldado(hnombre,hpts_vida, hpts_fuerza)
 {
+	velocidad = pVelocidad;
+	fuerza_extra = pFuerzaXtra;
 }
 
 int Asalto::atacar(bool victima){
@@ -19,6 +21,18 @@ void Asalto::defensa(int pts_ataque,bool atacante){
 	else
 		pts_vida = (pts_vida - (pts_fuerza/fuerza_extra));
 	
+}
+
+size_t Asalto::getSize(){
+	return sizeof(Asalto);
+}
+
+int Asalto::getVelocidad(){
+	return velocidad;
+}
+
+int Asalto::getFuerzaXtra(){
+	return fuerza_extra;
 }
 
 
