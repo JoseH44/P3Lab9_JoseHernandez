@@ -20,11 +20,10 @@ using std::vector;
 using std::ofstream;
 using std::ifstream;
 
-/*int num_random;//numero random de la llave
-				srand(time(NULL));
-				
-				num_random = 1 + rand()% (16-1);*/
 
+
+
+int simulacion(vector<Soldado*>,vector<Soldado*>);
 
 
 int main(int argc, char** argv) {
@@ -207,15 +206,31 @@ int main(int argc, char** argv) {
 			case 5:{
 				cout<<endl<<"1.Cargar Equipo#1"<<endl<<"2.Cargar Equipo#2"<<endl<<"Elija la Opcion:";
 				cin >> subMenu;
+				size_t tempSize=0;
+				Soldado* padre1 = NULL;
 				if(subMenu == 1){
-					
+					ifstream file("equipo1.bin",ios::binary);
+					for(int i = 0;i<equipo1.size();i++){
+						file.read((char*)&tempSize, sizeof(size_t));
+						file.read((char*)padre1,tempSize);
+						equipo1.push_back(padre1);
+					}
+					file.close();
 				}else if(subMenu == 2){
-					
+					ifstream f_ile("equipo2.bin",ios::binary);
+					for(int i = 0;i<equipo2.size();i++){
+						f_ile.read((char*)&tempSize, sizeof(size_t));
+						f_ile.read((char*)padre1,tempSize);
+						equipo2.push_back(padre1);
+					}
+					f_ile.close();
 				}
 				break;
 			}
 			
 			case 6:{
+				if(simulacion(equipo1,equipo2) == 0)
+					cout << "-Simulacion Terminada-";
 				break;
 			}
 			
@@ -241,4 +256,125 @@ int main(int argc, char** argv) {
 	delete soldadoGeneral;
 	
 	return 0;
+}
+
+//funcion de simulacion
+int simulacion(vector<Soldado*> equipo1,vector<Soldado*> equipo2){
+	bool turno = false;
+	int situacion = 1;
+	int ataque;
+	int randomAtacante,randomDefensor;//numero random de la llave
+	srand(time(NULL));
+	
+	int size_equipo1 = equipo1.size();
+	int size_equipo2 = equipo2.size();
+	Soldado* atacante = NULL;
+	Soldado* defensor = NULL;
+	while(situacion!=1){
+		
+		if(turno){
+			
+			randomAtacante = 0 + rand()%((size_equipo1+1) - 1);
+			atacante = equipo1[randomAtacante];
+			randomDefensor = 0 + rand()%((size_equipo2+1) - 1);
+			defensor = equipo2[randomDefensor];
+			if(Asalto* asalto = dynamic_cast<Asalto*>(atacante)){
+				if(Asalto* asalto_n = dynamic_cast<Asalto*>(defensor)){
+					ataque = asalto->atacar(true);
+					asalto_n->defensa(ataque,true);
+					if(asalto_n->getPtsVida() <= 0){
+						delete equipo2[randomDefensor];
+						equipo2.erase(equipo2.begin()+randomDefensor);
+					}
+				}
+				
+				if(Soporte* soporte_n = dynamic_cast<Soporte*>(defensor)){
+					ataque = asalto->atacar(false);
+					soporte_n->defensa(ataque,true);
+					if(soporte_n->getPtsVida() <= 0){
+						delete equipo2[randomDefensor];
+						equipo2.erase(equipo2.begin()+randomDefensor);
+					}
+				}
+			}
+			
+			if(Soporte* soporte = dynamic_cast<Soporte*>(atacante)){
+				if(Asalto* asalto_n = dynamic_cast<Asalto*>(defensor)){
+					ataque = soporte->atacar(true);//ataque
+					asalto_n->defensa(ataque,true);//defensa
+					if(asalto_n->getPtsVida() <= 0){
+						delete equipo2[randomDefensor];
+						equipo2.erase(equipo2.begin()+randomDefensor);
+					}
+				}
+				
+				if(Soporte* soporte_n = dynamic_cast<Soporte*>(defensor)){
+					ataque = soporte->atacar(false);
+					soporte_n->defensa(ataque,true);
+					if(soporte_n->getPtsVida() <= 0){
+						delete equipo2[randomDefensor];
+						equipo2.erase(equipo2.begin()+randomDefensor);
+					}
+				}
+			}
+			
+			
+			//validacion de tamaño
+			if(equipo1.size() == 0)
+				situacion = 1;
+			
+		}else{//turno del equipo 2
+			randomAtacante = 0 + rand()%((size_equipo2+1) - 1);
+			atacante = equipo2[randomAtacante];
+			randomDefensor = 0 + rand()%((size_equipo1+1) - 1);
+			defensor = equipo1[randomDefensor];
+			//si el atacante es soldado de asalto
+			if(Asalto* asalto = dynamic_cast<Asalto*>(atacante)){
+				if(Asalto* asalto_n = dynamic_cast<Asalto*>(defensor)){
+					ataque = asalto->atacar(true);
+					asalto_n->defensa(ataque,true);
+					if(asalto_n->getPtsVida() <= 0){
+						delete equipo1[randomDefensor];
+						equipo1.erase(equipo1.begin()+randomDefensor);
+					}
+				}
+				
+				if(Soporte* soporte_n = dynamic_cast<Soporte*>(defensor)){
+					ataque = asalto->atacar(false);
+					soporte_n->defensa(ataque,true);
+					if(soporte_n->getPtsVida() <= 0){
+						delete equipo1[randomDefensor];
+						equipo1.erase(equipo1.begin()+randomDefensor);
+					}
+				}
+			}
+			//si el atacante es soldado de soporte
+			if(Soporte* soporte = dynamic_cast<Soporte*>(atacante)){
+				if(Asalto* asalto_n = dynamic_cast<Asalto*>(defensor)){
+					ataque = soporte->atacar(true);//ataque
+					asalto_n->defensa(ataque,true);//defensa
+					if(asalto_n->getPtsVida() <= 0){
+						delete equipo1[randomDefensor];
+						equipo1.erase(equipo1.begin()+randomDefensor);
+					}
+				}
+				
+				if(Soporte* soporte_n = dynamic_cast<Soporte*>(defensor)){
+					ataque = soporte->atacar(false);
+					soporte_n->defensa(ataque,true);
+					if(soporte_n->getPtsVida() <= 0){
+						delete equipo1[randomDefensor];
+						equipo1.erase(equipo1.begin()+randomDefensor);
+					}
+				}
+			}
+			
+			if(equipo1.size() == 0)
+			situacion = 1;
+		}
+	}//fin del while
+	
+	return 0;
+	
+	
 }
