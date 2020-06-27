@@ -1,6 +1,6 @@
 #include "Asalto.h"
 
-Asalto::Asalto(string hnombre,int hpts_vida,int hpts_fuerza,int pVelocidad,int pFuerzaXtra) : Soldado(hnombre,hpts_vida, hpts_fuerza)
+Asalto::Asalto(int hpts_vida,int hpts_fuerza,int pVelocidad,int pFuerzaXtra) : Soldado(hpts_vida, hpts_fuerza)
 {
 	velocidad = pVelocidad;
 	fuerza_extra = pFuerzaXtra;

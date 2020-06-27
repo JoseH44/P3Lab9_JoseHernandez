@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 	
 	int opcion = 0;
 	int subMenu,tipoSol,posicionSoldado;
-	string nombre;
+	
 	int ptsVida,ptsFuerza,velocidad,fuerzaExtra,blindaje,camuflaje;
 	
 	cout<<"------BIENVENIDO------"<<endl<<endl;
@@ -54,8 +54,7 @@ int main(int argc, char** argv) {
 					cout<<endl<<"1.Soldado de Asalto"<<endl<<"2.Soldado de Soporte"<<endl<<"Elija la Opcion:";
 					cin>>tipoSol;
 					if(tipoSol == 1){
-						cout<<endl<<"Ingrese el Nombre del Soldado(Asalto):";
-						cin>>nombre;
+						
 						cout<<endl<<"Ingrese los Puntos de Vida del Soldado(Asalto):";
 						cin>>ptsVida;
 						cout<<endl<<"Ingrese los Puntos de Fuerza del Soldado(Asalto):";
@@ -64,12 +63,11 @@ int main(int argc, char** argv) {
 						cin>>velocidad;
 						cout<<endl<<"Ingrese la Fuerza Extra del Soldado(Asalto):";
 						cin>>fuerzaExtra;
-						soldadoGeneral = new Asalto(nombre,ptsVida,ptsFuerza,velocidad,fuerzaExtra);
+						soldadoGeneral = new Asalto(ptsVida,ptsFuerza,velocidad,fuerzaExtra);
 						equipo1.push_back(soldadoGeneral);
 						soldadoGeneral = NULL;
 					}else if(tipoSol==2){
-						cout<<endl<<"Ingrese el Nombre del Soldado(Soporte):";
-						cin>>nombre;
+						
 						cout<<endl<<"Ingrese los Puntos de Vida del Soldado(Soporte):";
 						cin>>ptsVida;
 						cout<<endl<<"Ingrese los Puntos de Fuerza del Soldado(Soporte):";
@@ -78,7 +76,7 @@ int main(int argc, char** argv) {
 						cin>>blindaje;
 						cout<<endl<<"Ingrese el Camuflaje del Soldado(Soporte):";
 						cin>>camuflaje;
-						soldadoGeneral = new Soporte(nombre,ptsVida,ptsFuerza,blindaje,camuflaje);
+						soldadoGeneral = new Soporte(ptsVida,ptsFuerza,blindaje,camuflaje);
 						equipo1.push_back(soldadoGeneral);
 						soldadoGeneral = NULL;
 					}
@@ -86,8 +84,7 @@ int main(int argc, char** argv) {
 					cout<<endl<<"1.Soldado de Asalto"<<endl<<"2.Soldado de Soporte"<<endl<<"Elija la Opcion:";
 					cin>>tipoSol;
 					if(tipoSol == 1){
-						cout<<endl<<"Ingrese el Nombre del Soldado(Asalto):";
-						getline(cin,nombre);
+						
 						cout<<endl<<"Ingrese los Puntos de Vida del Soldado(Asalto):";
 						cin>>ptsVida;
 						cout<<endl<<"Ingrese los Puntos de Fuerza del Soldado(Asalto):";
@@ -96,12 +93,11 @@ int main(int argc, char** argv) {
 						cin>>velocidad;
 						cout<<endl<<"Ingrese la Fuerza Extra del Soldado(Asalto):";
 						cin>>fuerzaExtra;
-						soldadoGeneral = new Asalto(nombre,ptsVida,ptsFuerza,velocidad,fuerzaExtra);
+						soldadoGeneral = new Asalto(ptsVida,ptsFuerza,velocidad,fuerzaExtra);
 						equipo2.push_back(soldadoGeneral);
 						soldadoGeneral = NULL;
 					}else if(tipoSol==2){
-						cout<<endl<<"Ingrese el Nombre del Soldado(Soporte):";
-						getline(cin,nombre);
+						
 						cout<<endl<<"Ingrese los Puntos de Vida del Soldado(Soporte):";
 						cin>>ptsVida;
 						cout<<endl<<"Ingrese los Puntos de Fuerza del Soldado(Soporte):";
@@ -110,7 +106,7 @@ int main(int argc, char** argv) {
 						cin>>blindaje;
 						cout<<endl<<"Ingrese el Camuflaje del Soldado(Soporte):";
 						cin>>camuflaje;
-						soldadoGeneral = new Soporte(nombre,ptsVida,ptsFuerza,blindaje,camuflaje);
+						soldadoGeneral = new Soporte(ptsVida,ptsFuerza,blindaje,camuflaje);
 						equipo2.push_back(soldadoGeneral);
 						soldadoGeneral = NULL;
 					}
@@ -142,7 +138,7 @@ int main(int argc, char** argv) {
 				if(subMenu == 1){
 					for(int i = 0;i<equipo1.size();i++){
 						Soldado* soldado = equipo1[i];
-						cout<<i<<endl<<"-Nombre:"<<soldado->getNombre()<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl;
+						cout<<i<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl;
 						if(Asalto* asalto = dynamic_cast<Asalto*>(soldado)){
 							cout<<"-Velocidad:"<<asalto->getVelocidad()<<endl<<"-Fuerza Extra:"<<asalto->getFuerzaXtra()<<endl;
 						}
@@ -154,7 +150,7 @@ int main(int argc, char** argv) {
 				}else if(subMenu == 2){
 					for(int i = 0;i<equipo2.size();i++){
 						Soldado* soldado = equipo2[i];
-						cout<<i<<endl<<"-Nombre:"<<soldado->getNombre()<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl;
+						cout<<i<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl;
 						if(Asalto* asalto = dynamic_cast<Asalto*>(soldado)){
 							cout<<"-Velocidad:"<<asalto->getVelocidad()<<endl<<"-Fuerza Extra:"<<asalto->getFuerzaXtra()<<endl;
 						}
@@ -211,7 +207,9 @@ int main(int argc, char** argv) {
 				if(subMenu == 1){
 					ifstream file("equipo1.bin",ios::binary);
 					for(int i = 0;i<equipo1.size();i++){
+						 
 						file.read((char*)&tempSize, sizeof(size_t));
+						padre1 = (Soldado*) malloc(tempSize);
 						file.read((char*)padre1,tempSize);
 						equipo1.push_back(padre1);
 					}
@@ -220,6 +218,7 @@ int main(int argc, char** argv) {
 					ifstream f_ile("equipo2.bin",ios::binary);
 					for(int i = 0;i<equipo2.size();i++){
 						f_ile.read((char*)&tempSize, sizeof(size_t));
+						padre1 = (Soldado*) malloc(tempSize);
 						f_ile.read((char*)padre1,tempSize);
 						equipo2.push_back(padre1);
 					}

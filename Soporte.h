@@ -9,7 +9,7 @@ class Soporte : public Soldado
 		int blindaje;
 		int camuflaje;
 	public:
-		Soporte(string,int,int,int,int);
+		Soporte(int,int,int,int);
 		int atacar(bool);
 		void defensa(int,bool);
 		size_t getSize();

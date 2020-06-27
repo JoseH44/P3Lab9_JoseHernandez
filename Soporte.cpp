@@ -1,6 +1,6 @@
 #include "Soporte.h"
 
-Soporte::Soporte(string hnombre,int hpts_vida,int hpts_fuerza,int pBlindaje,int pCamuflaje) : Soldado(hnombre,hpts_vida, hpts_fuerza)
+Soporte::Soporte(int hpts_vida,int hpts_fuerza,int pBlindaje,int pCamuflaje) : Soldado(hpts_vida, hpts_fuerza)
 {
 	blindaje = pBlindaje;
 	camuflaje = pCamuflaje;
