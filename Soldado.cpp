@@ -4,7 +4,7 @@ Soldado::Soldado(int Ppts_vida,int Ppts_fuerza)
 {
 	
 	pts_vida = Ppts_vida;
-	pts_fuerza = pts_fuerza;
+	pts_fuerza = Ppts_fuerza;
 }
 
 
@@ -19,7 +19,7 @@ void Soldado::setPtsVida(int newVida){
 }
 
 int Soldado::getPtsFuerza(){
-	return pts_vida;
+	return pts_fuerza;
 }
 
 void Soldado::setPtsFuerza(int newFuerza){

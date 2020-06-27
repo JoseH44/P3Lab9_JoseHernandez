@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
 	int opcion = 0;
 	int subMenu,tipoSol,posicionSoldado;
 	
-	int ptsVida,ptsFuerza,velocidad,fuerzaExtra,blindaje,camuflaje;
+	
 	
 	cout<<"------BIENVENIDO------"<<endl<<endl;
 	while(opcion!=7){
@@ -47,7 +47,8 @@ int main(int argc, char** argv) {
 		
 		switch(opcion){
 			case 1:{
-				
+				int ptsVida,ptsFuerza,velocidad;
+				int fuerzaExtra,blindaje,camuflaje;
 				cout<<endl<<"1.Crear en Equipo#1"<<endl<<"2.Crear en Equipo#2"<<endl<<"Elija la Opcion:";
 				cin >> subMenu;
 				if(subMenu == 1){
@@ -63,6 +64,8 @@ int main(int argc, char** argv) {
 						cin>>velocidad;
 						cout<<endl<<"Ingrese la Fuerza Extra del Soldado(Asalto):";
 						cin>>fuerzaExtra;
+						cout<<endl<<"DATOS->"<<ptsVida<<ptsFuerza<<velocidad<<fuerzaExtra<<endl;
+						
 						soldadoGeneral = new Asalto(ptsVida,ptsFuerza,velocidad,fuerzaExtra);
 						equipo1.push_back(soldadoGeneral);
 						soldadoGeneral = NULL;
@@ -117,13 +120,13 @@ int main(int argc, char** argv) {
 				cout<<endl<<"1.Eliminar en Equipo#1"<<endl<<"2.Eliminar en Equipo#2"<<endl<<"Elija la Opcion:";
 				cin >> subMenu;
 				if(subMenu == 1){
-					cout<<endl<<"Ingrese la Posicion del Soldado a Eliminar:"<<endl;
+					cout<<endl<<"Ingrese la Posicion del Soldado a Eliminar:";
 					cin>>posicionSoldado;
 					delete equipo1[posicionSoldado];
 					equipo1.erase(equipo1.begin()+posicionSoldado);
 					cout<<endl<<"-Soldado Eliminado-"<<endl;
 				}else if(subMenu == 2){
-					cout<<endl<<"Ingrese la Posicion del Soldado a Eliminar:"<<endl;
+					cout<<endl<<"Ingrese la Posicion del Soldado a Eliminar:";
 					cin>>posicionSoldado;
 					delete equipo2[posicionSoldado];
 					equipo1.erase(equipo2.begin()+posicionSoldado);
@@ -138,7 +141,7 @@ int main(int argc, char** argv) {
 				if(subMenu == 1){
 					for(int i = 0;i<equipo1.size();i++){
 						Soldado* soldado = equipo1[i];
-						cout<<i<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl;
+						cout<<i<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl<<"-Puntos de Fuerza:"<<soldado->getPtsFuerza()<<endl;
 						if(Asalto* asalto = dynamic_cast<Asalto*>(soldado)){
 							cout<<"-Velocidad:"<<asalto->getVelocidad()<<endl<<"-Fuerza Extra:"<<asalto->getFuerzaXtra()<<endl;
 						}
@@ -147,10 +150,11 @@ int main(int argc, char** argv) {
 						}
 						
 					}
+					cout<<endl;
 				}else if(subMenu == 2){
 					for(int i = 0;i<equipo2.size();i++){
 						Soldado* soldado = equipo2[i];
-						cout<<i<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl;
+						cout<<i<<endl<<"-Puntos de Vida:"<<soldado->getPtsVida()<<endl<<"-Puntos de Fuerza:"<<soldado->getPtsFuerza()<<endl;
 						if(Asalto* asalto = dynamic_cast<Asalto*>(soldado)){
 							cout<<"-Velocidad:"<<asalto->getVelocidad()<<endl<<"-Fuerza Extra:"<<asalto->getFuerzaXtra()<<endl;
 						}
@@ -159,6 +163,7 @@ int main(int argc, char** argv) {
 						}
 						
 					}
+					cout<<endl;
 				}
 				break;
 			}
@@ -206,22 +211,29 @@ int main(int argc, char** argv) {
 				Soldado* padre1 = NULL;
 				if(subMenu == 1){
 					ifstream file("equipo1.bin",ios::binary);
-					for(int i = 0;i<equipo1.size();i++){
-						 
-						file.read((char*)&tempSize, sizeof(size_t));
+					while(file.read((char*)&tempSize, sizeof(size_t))){
 						padre1 = (Soldado*) malloc(tempSize);
 						file.read((char*)padre1,tempSize);
 						equipo1.push_back(padre1);
 					}
+					
+						 
+						
+						
+					
 					file.close();
 				}else if(subMenu == 2){
 					ifstream f_ile("equipo2.bin",ios::binary);
-					for(int i = 0;i<equipo2.size();i++){
-						f_ile.read((char*)&tempSize, sizeof(size_t));
+					
+					while(f_ile.read((char*)&tempSize, sizeof(size_t))){
 						padre1 = (Soldado*) malloc(tempSize);
 						f_ile.read((char*)padre1,tempSize);
 						equipo2.push_back(padre1);
 					}
+					
+						
+						
+					
 					f_ile.close();
 				}
 				break;
@@ -259,10 +271,10 @@ int main(int argc, char** argv) {
 
 //funcion de simulacion
 int simulacion(vector<Soldado*> equipo1,vector<Soldado*> equipo2){
-	bool turno = false;
-	int situacion = 1;
+	bool turno = true;
+	int situacion = 0;
 	int ataque;
-	int randomAtacante,randomDefensor;//numero random de la llave
+	int randomAtacante,randomDefensor;//numeros random para el atacando y defensor
 	srand(time(NULL));
 	
 	int size_equipo1 = equipo1.size();
@@ -319,8 +331,12 @@ int simulacion(vector<Soldado*> equipo1,vector<Soldado*> equipo2){
 			
 			
 			//validacion de tamaño
-			if(equipo1.size() == 0)
+			if(equipo2.size() == 0)
 				situacion = 1;
+			else
+				turno = false;
+			cout<<endl<<"---EQUIPO#1 ES EL VENCEDOR---";
+			
 			
 		}else{//turno del equipo 2
 			randomAtacante = 0 + rand()%((size_equipo2+1) - 1);
@@ -369,7 +385,10 @@ int simulacion(vector<Soldado*> equipo1,vector<Soldado*> equipo2){
 			}
 			
 			if(equipo1.size() == 0)
-			situacion = 1;
+				situacion = 1;
+			else
+				turno = true;
+			cout<<endl<<"---EQUIPO#2 ES EL VENCEDOR---";
 		}
 	}//fin del while
 	
