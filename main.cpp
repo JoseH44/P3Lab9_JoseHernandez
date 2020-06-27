@@ -209,6 +209,7 @@ int main(int argc, char** argv) {
 				cin >> subMenu;
 				size_t tempSize=0;
 				Soldado* padre1 = NULL;
+				
 				if(subMenu == 1){
 					ifstream file("equipo1.bin",ios::binary);
 					while(file.read((char*)&tempSize, sizeof(size_t))){
@@ -216,10 +217,6 @@ int main(int argc, char** argv) {
 						file.read((char*)padre1,tempSize);
 						equipo1.push_back(padre1);
 					}
-					
-						 
-						
-						
 					
 					file.close();
 				}else if(subMenu == 2){
@@ -230,9 +227,6 @@ int main(int argc, char** argv) {
 						f_ile.read((char*)padre1,tempSize);
 						equipo2.push_back(padre1);
 					}
-					
-						
-						
 					
 					f_ile.close();
 				}
